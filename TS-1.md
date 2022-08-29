@@ -73,3 +73,152 @@ let mxf2:string = '18'
 let age:number = mxf2 as unknown as number
 console.log(age); // 18
 ```
+
+### 类型推论
+- 未指明类型或未赋值都会触发类型推论
+- 未指定类型且未赋值，会被认为是any类型
+- 赋值且为指定类型会认为是该值的类型
+```typescript
+// 未指定类型,但是赋值，变量会被推论为字符型
+let nums = '123' // 字符型
+nums = 123
+
+let num  // any型，可任意更改类型
+num = 123
+``` 
+### 类型别名
+- 相同类型变量声明时可使用类型别名简化语法
+```typescript
+type more = (string | number | boolean) []
+
+let aaa:more = [1,2,'3']
+let bbb:more = [1,'2',true]
+```
+
+### 对象的类型--接口
+  
+```typescript
+// 定义Type类型
+// readonly：表示该属性是只读属性,只读 限制tom在初始化对象是是否存在id属性，且id不能通过tom.改变
+// ？表示该属性可选
+interface Type {
+    name: string,
+    readonly id: number,
+    age12?: number,
+    [sex: string]: string | number
+}
+//  tom的类型是Type，所以tom的属性初始化必须和Type相同，不能多不能少，
+// 由于添加了任意属性，所以tom在初始化时可额外添加abc属性
+let tom: Type = {
+    name: 'cat',
+    id: 12,
+    age12: 19,
+    sex: 'boy',
+    abc:'123'
+}
+```
+
+### 数组声明
+``` typescript
+// 定义数组
+// 类型+ []
+let array: number[] = [1,2,3] 
+// 泛型定义
+let Arr:Array<number | string> = []
+// 接口定义
+interface happy {
+    // 表示索引是数字时，值也必须是数字
+    [index:number]: number
+}
+let resArr: happy = [1,2,3]
+
+// 类数组-- 不能用普通数组形式来表现，应该使用接口形式
+function fn() {
+    let args: {
+        [index:number]: number,
+        length:number
+    }= arguments
+}
+```
+
+### 函数
+- 函数声明
+```typescript
+function fn1(x:number,y:string): string | number {
+    return x + y
+}
+console.log(fn1(1,'2'));  // '12'
+```
+
+- 此处第一个=>不是箭头函数，左边为输入类型，右边为输出类型，第二个=>表示为箭头函数
+```typescript
+let fn2: (x:number,y:number) => number = (x:number,y:number):number => {
+    return x + y
+}
+console.log(fn2(5,9));
+```
+
+- 接口定义函数，对等号左侧函数进行类型限制，保证后续函数的参数个数，类型，返回值类型不变
+```typescript
+interface Fn {
+    (x:number,y:number): number
+}
+let fn3:Fn = function (x:number,y:number): number {
+    return x + y
+}
+console.log(fn3(1,2));
+```
+- 可选参数 必须写在必须参数后
+```typescript
+let fn4 = function (x:number,y:number,z?:number): number {
+    return x + y
+}
+console.log(fn4(1,2));
+```
+- 参数默认值
+- TS会将添加默认值的形参转化为可选参数，此时可以写在必传参数前面
+```typescript
+let fn5 = function (x:number = 2,y:number): number {
+    return x + y
+}
+console.log(fn5(undefined,2)); // 4
+```
+- 剩余参数
+```typescript
+let fn6 = function (x:number,...rest:any []) {
+    console.log(...rest);
+}
+console.log(1,2,3,4);
+```
+- 重载---允许函数接受不同类型或数量的参数进行处理
+- 可预先定义多种函数定义，最后一次将函数实现
+```typescript
+function fun(x:number):number;
+function fun(x:string):string;
+function fun (x:number | string): string | number | void {
+    if(typeof(x) === 'number') {
+        return x.toString().trim().split('').reverse().join('')
+    }
+    return x.trim().split('').reverse().join('')
+}
+// console.log(fun(123));
+console.log(fun('143'));
+```
+
+- 接口继承---extends
+- 继承公共的属性和方法
+```typescript
+interface Father {
+    x: number
+    y: string
+}
+interface sons extends Father {
+    z: number
+}
+let p: sons = {
+    x: 1,
+    y: '2',
+    z: 3
+}
+console.log(p);
+```
