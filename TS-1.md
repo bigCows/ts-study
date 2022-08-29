@@ -222,3 +222,38 @@ let p: sons = {
 }
 console.log(p);
 ```
+// 类型断言---使用as关键字手动指定一个值的类型
+// 1：将联合类型断言为其中某个类型
+// 不确定联合类型的变量是什么类型时，只能访问联合类型中共有的属性和方法
+// 2: 将父类断言为子类
+// 3：任何类型都可被断言为any
+// 4：any可以被断言为任何类型
+interface Cat {
+    name: string
+    run(): void
+}
+interface Fish {
+    name: string
+    id: number
+    swim():void 
+}
+
+let cat: Cat = {
+    name: '猫',
+    run() {console.log('run');
+    }
+}
+let fishs:Fish = {
+    name: '鱼',
+    id: 1,
+    swim() {
+        console.log('fish');
+    }
+}
+
+function getName(animal: Cat | Fish) {
+    // return animal.name 可访问到共有属性name
+    return (animal as Fish).id
+}
+
+console.log(getName(cat));
