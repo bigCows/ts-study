@@ -222,12 +222,15 @@ let p: sons = {
 }
 console.log(p);
 ```
-// 类型断言---使用as关键字手动指定一个值的类型
-// 1：将联合类型断言为其中某个类型
-// 不确定联合类型的变量是什么类型时，只能访问联合类型中共有的属性和方法
-// 2: 将父类断言为子类
-// 3：任何类型都可被断言为any
-// 4：any可以被断言为任何类型
+### 类型断言---使用as关键字手动指定一个值的类型
+- 1：将联合类型断言为其中某个类型
+  
+  不确定联合类型的变量是什么类型时，只能访问联合类型中共有的属性和方法
+- 2: 将父类断言为子类
+- 3：任何类型都可被断言为any
+- 4：any可以被断言为任何类型
+```typescript
+
 interface Cat {
     name: string
     run(): void
@@ -253,7 +256,129 @@ let fishs:Fish = {
 
 function getName(animal: Cat | Fish) {
     // return animal.name 可访问到共有属性name
+    // 将联合类型断言为其他类型
     return (animal as Fish).id
 }
 
 console.log(getName(cat));
+```
+- 断言不是类型转化，只作用在编译过程中，不能影响变量最终输出结果
+  
+```typescript
+function getX(x:any): boolean {
+    // return x // 1
+    return Boolean(x)
+}
+
+// console.log(getX(1)); // 1
+console.log(getX(1)) // true
+```
+### as const 
+- const可将宽泛类型转为值类型
+```typescript
+let str:string = '123' // 宽泛类型
+let str1: '555' = '555'  // 值类型
+const str2 = '3443' // 值类型
+
+let str3 = '123' as const // 将宽泛类型转为值类型
+let arr4 = [1,2,str,str1] as const  // 1,2,string,555
+```
+
+### 声明文件（.d.ts结尾的文件）---存放js文件类型信息的文件
+- 使用@type统一管理第三方库的声明文件
+```typescript
+ npm install @types/jquery -D
+```
+- 在声明文件中，只有function,class,interface可以直接导出，其余变量需要先declare定义，再导出
+
+### 元组--合并不同类型的对象集合
+```typescript
+let ar1:[string | number]
+ar1 = ['qwe',213]
+ar1 = [123,'q3we'] // 元组的数据顺序和数量是固定的，字符串在前，数字在后
+```
+### 枚举-- 常数项枚举、计算所得项枚举、外部枚举、字符串枚举（成员没有自增长行为，必须有初始值）
+```typescript
+let str4: string = '123'
+enum ar5 { a = 1.5, b = -3, c, d = str4.length}
+console.log(ar5.a); // 手动赋值可为小数
+console.log(ar5.b); // 手动赋值可为负数
+console.log(ar5.c); 
+console.log(ar5.d); // 计算所得项之后不能跟未手动赋值的项，否则会报错
+
+// 通过declare定义外部枚举，未指定初识值的外部枚举项都是计算所得项，转译为JS时会擦除外部枚举的定义
+declare enum enums {
+    first,
+    second,
+    third
+}
+// 也可通过declare const 同时定义枚举
+declare const enum enums {
+    first,
+    second,
+    third
+}
+```
+### 类
+- 没有变量提升，所有方法不可枚举
+- 使用class定义
+- 使用extends继承
+- es6 static 定义静态方法，不用实例化类，可通过类直接调用,es7 可以定义静态属性
+- 修饰符
+  
+  三种修饰符 访问[public,private,protected] 静态static 只读readonly
+    - 修饰属性和方法
+      - public---默认    公共属性和方法
+         ```typescript
+        class zoo {
+            public tiger;
+            public  constructor (name:string) {
+                this.tiger = name
+            }
+        }
+
+        let myTiger = new zoo('老虎')
+        console.log(myTiger.tiger); // 老虎       
+         ```
+      - private    私有：只能在类的内部访问
+      - protected  继承+私有：允许在类内和子类中访问
+    - 修饰构造函数
+        - private 该类不允许被继承或实例化
+        - protected 该类只允许被继承
+    - readonly
+
+        只读属性可在定义时赋值，还能在构造函数中修改值，只读限制在改属性初始化之后不可修改
+        ```typescript
+        class Dog {
+            readonly myDog: string = '二哈';
+            constructor (name: string) {
+                this.myDog = name
+            }
+        }
+
+        let dogs = new Dog('德牧')
+        console.log(dogs.myDog);
+        // dogs.myDog = '23' 报错，该属性为只读 
+        ```
+    - 抽象类 abstract---不允许被实例化，抽象方法只能被子类实现 
+
+        抽象类可以没有抽象方法，但抽象方法的类必须生命为抽象类
+    ```typescript
+      abstract class animal {
+          public name: string;
+          constructor(name:string) {
+              this.name = name
+          }
+          abstract sayName():void
+      }
+
+        class dog extends animal {
+          sayName() {
+              return `${this.name} + dog`
+          }
+      }
+
+      // let g = new animal() 报错：无法创建抽象类的实例
+      let Dogs = new dog('二哈')  
+      console.log(Dogs.sayName()); // 通过子类实现抽象类的抽象方法
+      ```
