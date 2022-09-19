@@ -334,19 +334,31 @@ interface all {
     sayName(): void
 }
 
-interface alls {
-    sayNames(): void
+interface JK {
+    hello(): void
 }
-class A {
-   
-}
-class V extends A implements all {
-    sayName() {
-         console.log('实现V');
 
-    }
-  
+class TG {
+    money: string = '109'
 }
+// 类继承类且实现多个接口
+class GT extends TG implements JK, all {
+    hello() {
+      console.log('hello');
+    }
+    sayName(): void {
+        console.log('sayName');
+        
+    }
+    
+
+}
+
+let gt = new GT()
+gt.hello()
+gt.sayName()
+console.log(gt.money);
+
 
 class C implements all {
     sayName(): void {
@@ -357,8 +369,7 @@ class C implements all {
 let cccc = new C()
 cccc.sayName()
 
-let vvvv = new V()
-vvvv.sayName()
+
 // 接口可以继承接口
 
 interface q {
@@ -392,9 +403,82 @@ class point {
 }
 let myPoint = new point('xx','yy')  // 实例化类
 myPoint.sayName()
-// point类型
-// let myPoint_1: point 
-// myPoint_1.x = '32432'
-// myPoint_1.y= 'y123'
-// myPoint_1.sayName()
 
+// point类型
+let myPoint_1: point = {
+    x: '32432',
+    y: 'y123',
+    sayName() {}
+}
+console.log(myPoint_1.x);
+
+myPoint_1.sayName()
+
+// 声明合并
+
+interface mn {
+    name: string,
+    tea(x:string): void
+}
+
+interface mn {
+    age: string,
+    cat(x:string): void
+}
+
+let sd: mn = {
+    name: '123',
+    age:'19',
+    tea(x: string): string {
+       return x
+    },
+    cat(x:string): string {
+        return x
+    }
+}
+
+console.log(sd.tea('茶'));
+console.log(sd.cat('猫'));
+
+class User {
+    name: string
+    age: number
+    constructor(n: string, a: number) {
+        this.name = n
+        this.age = a;
+    }
+
+    info(): string {
+        return `${this.name}的年龄是 ${this.age}`
+    }
+}
+
+
+const hd = new User('后盾人', 12);
+const xj = new User('向军', 18)
+console.log(hd);
+
+const userss: User[] = [hd, xj];
+console.log(userss);
+
+class Pig {
+    protected name:string = 'peiqi'
+    say() {
+        console.log(this.name +'123');
+
+    }    
+}
+let pigzhu = new Pig()
+pigzhu.say()
+class PigOne extends Pig {
+    constructor() {
+        super()
+        // console.log(this.name);
+    }
+    sayName() {
+        console.log(this.name);
+        
+    }
+}
+let zhuzhu = new PigOne()
+zhuzhu.sayName()

@@ -1,5 +1,3 @@
-# 变量
-
 ### 声明变量且声明类型
 ```typescript
 let num: number = 18;
@@ -35,7 +33,7 @@ let num: number = 18;
 ```
 ### 声明对象，限定值
 ```typescript
-    let obj: {name: string, age: number, url?:string}
+        let obj: {name: string, age: number, url?:string}
      // 此处url后的？表示在给对象赋值时，url为可选择参数
     obj = { name:'zs', age: 12}
 ```
@@ -60,6 +58,12 @@ let num: number = 18;
     //  此项为tsconfig.json中的配置项,由于ts在编译阶段遇到错误也会编译完成，只有在执行结果中才能看到错误，而想要在编辑阶段发现错误，就应用此配置
      "noImplicitAny": true,
 ```
+### null与undefined
+- 默认情况下，null和undefined可作为其他类型的值，如果严格值类型，可通过配置文件将该选项strictNullChecks改为true 
+### void
+- 函数没有返回值可为该类型，默认情况返回值为null或undefined
+### never
+- 对于不能走完整个流程而被迫中断的函数使用该返回值类型
 ### unknown 未知类型
 
 ```typescript
@@ -96,6 +100,8 @@ let bbb:more = [1,'2',true]
 ```
 
 ### 对象的类型--接口
+- 接口可以继承接口、类
+- 接口不能实现接口或类
   
 ```typescript
 // 定义Type类型
@@ -295,7 +301,7 @@ let arr4 = [1,2,str,str1] as const  // 1,2,string,555
 ```typescript
 let ar1:[string | number]
 ar1 = ['qwe',213]
-ar1 = [123,'q3we'] // 元组的数据顺序和数量是固定的，字符串在前，数字在后
+ar1 = [123,'q3we'] // 元组的数据顺序和数量是固定的f
 ```
 ### 枚举-- 常数项枚举、计算所得项枚举、外部枚举、字符串枚举（成员没有自增长行为，必须有初始值）
 ```typescript
@@ -323,10 +329,18 @@ declare const enum enums {
 - 没有变量提升，所有方法不可枚举
 - 使用class定义
 - 使用extends继承
+- 类可以实现接口或类
+- 类不能继承接口，类只能继承另一个类
 - es6 static 定义静态方法，不用实例化类，可通过类直接调用,es7 可以定义静态属性
 - 修饰符
   
   三种修饰符 访问[public,private,protected] 静态static 只读readonly
+
+  父类的private不能被修改
+
+  父类的public子类只能设置public
+
+  父类的protected子类可以改为protected或public
     - 修饰属性和方法
       - public---默认    公共属性和方法
          ```typescript
@@ -347,6 +361,9 @@ declare const enum enums {
         - protected 该类只允许被继承
     - readonly
 
+        在类中，只读属性可以在constructor中修改值
+
+        在接口和定义类型时，只读属性不能二次修改值
         只读属性可在定义时赋值，还能在构造函数中修改值，只读限制在改属性初始化之后不可修改
         ```typescript
         class Dog {
@@ -359,8 +376,21 @@ declare const enum enums {
         let dogs = new Dog('德牧')
         console.log(dogs.myDog);
         // dogs.myDog = '23' 报错，该属性为只读 
+        
+        interface xx {
+            readonly name: string
+        }
+
+        let obj: xx = {
+            name: 'zs'
+        }
+        // obj.name = 'sa' 报错 属性为只读
+        let asd: {readonly name: string} = {
+                name : '342'
+        }
+        // asd.name = 123 报错 属性为只读
         ```
-    - 抽象类 abstract---不允许被实例化，抽象方法只能被子类实现 
+  - 抽象类 abstract---不允许被实例化，抽象方法只能被子类实现 
 
         抽象类可以没有抽象方法，但抽象方法的类必须生命为抽象类
     ```typescript
@@ -382,3 +412,115 @@ declare const enum enums {
       let Dogs = new dog('二哈')  
       console.log(Dogs.sayName()); // 通过子类实现抽象类的抽象方法
       ```
+- 类与接口
+
+     实现(implement)是面向对象编程的概念，大多情况下，类只能继承另一个类，类的共性可以提取为接口，使用implement关键字实现
+     
+     实现只能用在类,类实现接口，类不能实现类
+  ```typescript
+      
+    interface all {
+        sayName(): void
+    }
+
+    interface JK {
+        hello(): void
+    }
+
+    class TG {
+        money: string = '109'
+    }
+    
+    // 类继承类且实现多个接口
+    class GT extends TG implements JK,all {
+        hello() {
+          console.log('hello');
+        }
+        sayName(): void {
+        console.log('sayName');
+        
+    }
+
+    }
+
+    let gt = new GT()
+    gt.hello()
+    gt.sayName()
+    console.log(gt.money);
+
+    // 接口继承接口
+    interface q {
+        name: string;
+    }
+    interface w extends q {
+        sex: string
+    }
+    let vc: w = {
+        name: '123',
+        sex: '123'
+    }
+    console.log(vc);
+
+    //接口可以继承类(TS特有)，当声明了一个类point时，除了声明了一个类外，还创建了一个point的类型
+
+    // 创建point类型时，不包含构造函数construtor和一系列静态属性和静态方法，只有实例属性和实例方法
+    class point {
+        x: string;
+        y:string;
+        constructor(x:string,y:string) {
+            this.x = x
+            this.y = y
+        }
+        sayName() {
+            console.log(`${this.x}`);
+            console.log(`${this.y}`);
+
+
+        }
+    }
+    let myPoint = new point('xx','yy')  // 实例化类
+    myPoint.sayName()
+
+    // point类型 
+    let myPoint_1: point = {
+        x: '32432',
+        y: 'y123',
+        sayName() {}
+    }
+    console.log(myPoint_1.x);
+
+    myPoint_1.sayName()
+      ```
+### 声明合并
+
+    如果定义了两个名字相同的函数、接口、类，只要属性类型一致，就可以合并
+```typescript
+    // 函数合并就是函数重载
+    // 类合并规则与接口合并规则一致
+    
+    // 接口合并:属性和方法类型相同即可合并
+    interface mn {
+        name: string,
+        tea(x:string): void
+    }
+    
+    interface mn {
+        age: string,
+        cat(x:string): void
+    }
+    
+    let sd: mn = {
+        name: '123',
+        age:'19',
+        tea(x: string): string {
+           return x
+        },
+        cat(x:string): string {
+            return x
+        }
+    }
+    
+    console.log(sd.tea('茶'));
+    console.log(sd.cat('猫'));
+    
+```
