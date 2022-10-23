@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var cc = '123';
 // let nums = '123' 
 // console.log(nums);
@@ -137,7 +139,7 @@ var str1 = '555'; // 值类型
 var str2 = '3443'; // 值类型
 var str3 = '123'; // 将宽泛类型转为值类型
 var arr4 = [1, 2, str, str1]; // 1,2,string,555
-// 元组对于联合类型的数量和顺序都有限制
+// 元组对于类型的数量和顺序都有限制
 var ar1;
 ar1 = ['qwe', 213];
 // ar1 = [123,'q3we']
@@ -146,7 +148,7 @@ ar1[0] = '23';
 // 常规定义数组联合类型 顺序和数量没有限制
 var ar2;
 ar2 = [123, 123, '123', 123];
-// 泛型定义联合类型 顺序数量没有限制
+// 泛型定义联合类型 顺序数量没有限制，元组有限制
 var ar4 = [];
 ar4 = ['123', 123, 123, '123'];
 var obj3 = {

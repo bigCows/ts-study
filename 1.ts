@@ -189,7 +189,7 @@ const str2 = '3443' // 值类型
 let str3 = '123' as const // 将宽泛类型转为值类型
 let arr4 = [1,2,str,str1] as const  // 1,2,string,555
 
-// 元组对于联合类型的数量和顺序都有限制
+// 元组对于类型的数量和顺序都有限制
 let ar1:[string, number]
 ar1 = ['qwe',213]
 // ar1 = [123,'q3we']
@@ -200,7 +200,7 @@ ar1[0] = '23'
 let ar2: (string | number) [] 
 ar2 = [123,123, '123',123] 
 
-// 泛型定义联合类型 顺序数量没有限制
+// 泛型定义联合类型 顺序数量没有限制，元组有限制
 let ar4:Array<number | string> = []
 ar4 = ['123',123,123,'123']
 
@@ -482,3 +482,5 @@ class PigOne extends Pig {
 }
 let zhuzhu = new PigOne()
 zhuzhu.sayName()
+
+export {}

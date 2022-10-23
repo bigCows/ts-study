@@ -299,9 +299,9 @@ let arr4 = [1,2,str,str1] as const  // 1,2,string,555
 
 ### 元组--合并不同类型的对象集合
 ```typescript
-let ar1:[string | number]
+let ar1:[string, number]
 ar1 = ['qwe',213]
-ar1 = [123,'q3we'] // 元组的数据顺序和数量是固定的f
+ar1 = [123,'q3we'] // **元组的数据顺序和数量是固定的,当前行会报错
 ```
 ### 枚举-- 常数项枚举、计算所得项枚举、外部枚举、字符串枚举（成员没有自增长行为，必须有初始值）
 ```typescript

@@ -35,9 +35,10 @@
 type F1 = (x:string)=> void
 type F2 = (y:string,x:string) => void
 
-let Fn1!: F1
+let Fn1: F1
+let Fn1:F1 =() => {}
 let Fn2: F2 
-
+ 
 Fn2 = Fn1
 
 // 1.函数参数类型为原始类型(string,number,boolean)时，参数类型一致即可兼容
